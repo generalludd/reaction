@@ -1,0 +1,50 @@
+version: "3"
+services:
+  web:
+    image: ten7/flightdeck-web-8.1
+    ports:
+      - "80:80"
+    volumes:
+      - ./web:/var/www/web:cached
+      - ./keys:/var/www/keys:cached
+      - ./config:/var/www/config:cached
+      - ./db-backups:/var/www/db-backups:cached
+      - ./flight-deck.yml:/config/web/flightdeck-web.yml
+      - ./scripts:/var/www/scripts:cached
+      - ./vendor:/var/www/vendor:cached
+      - ./settings.flightdeck.php:/var/www/web/sites/default/settings.local.php
+      - ./flightdeck.services.yml:/var/www/web/sites/default/includes/flightdeck.services.yml
+      - ./composer.json:/var/www/composer.json
+      - ./composer.lock:/var/www/composer.lock
+      - ./patches:/var/www/patches:cached
+    hostname: backoffice
+    domainname: test
+  db:
+    image: ten7/flightdeck-db-10.6
+    ports:
+      - 3306:3306
+    volumes:
+      - /var/lib/mysql
+      - ./db-backups:/tmp/db-backups:cached
+      - ./flight-deck.yml:/config/mysql/flight-deck-db.yml
+  pma:
+    image: phpmyadmin/phpmyadmin
+    environment:
+      PMA_HOST: db
+      PMA_USER: root
+      PMA_PASSWORD: root
+      PHP_UPLOAD_MAX_FILESIZE: 1G
+      PHP_MAX_INPUT_VARS: 1G
+    ports:
+     - "8001:80"
+  mailhog:
+    image: mailhog/mailhog
+    ports:
+      - "8002:8025"
+  solr:
+    image: ten7/flightdeck-solr-8
+    volumes:
+      - ./solr-conf/8.x:/solr-conf
+      - ./flight-deck.yml:/config/solr/flightdeck-solr.yml
+    ports:
+      - "8003:8983"

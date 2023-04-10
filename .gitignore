@@ -1,0 +1,29 @@
+/keys/*.key
+/web/sites/default/settings.local.php
+/web/sites/default/files/*
+/web/core/
+/vendor/
+/web/modules/contrib/
+web/themes/contrib/
+web/profiles/contrib/
+console/
+drush/contrib/
+
+
+# Ignore mounts
+web/sites/default/files
+tmp
+private
+.drush
+drush-backups
+.console
+.lando.yml
+
+# Docker-related ignore files.
+/web/sites/default/flightdeck.services.yml
+/web/sites/default/includes/flightdeck.services.yml
+
+docker-compose.override.yml
+#php unit testing ignore files
+.phpunit.result.cache
+/web/sites/simpletest/*
